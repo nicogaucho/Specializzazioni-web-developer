@@ -1,46 +1,39 @@
-// Rifattorizza queste funzioni 
+// Rifattorizza queste funzioni
 // List:
   // template strings da sostituire con + concatenazione di strings
-  // Eliminare l'uso di var da sostituicon con let o const
+  // Eliminare l'uso di var da sostituisci con con let o const
   // Sostituire l'uso di function keyword dove possibile con arrow functions
   // Sostituire dot syntax con desctructuring
   // uso di moduli con import, export per clean code
 
-
-function getEmails (people, options) {
+const getEmails = (people, options) => {
   options = options || {}
-  var withNames = options.withNames || false
-  var onlyActive = options.onlyActive || false
+  const withNames = options.withNames || false
+  const onlyActive = options.onlyActive || false
   if (onlyActive) {
     people = people.filter(isActive)
   }
-  return people.map(function (person) {
-    var result = ''
-    if (withNames) {
-      result = person.name + ' <' + person.email + '>'
-    } else {
-      result = person.email
-    }
+  return people.map(({ name, email }) => {
+    let result = '';
+    (withNames) ? result = `${name} <${email}>` : result = email
     return result
   }).join(', ')
 }
 
-function getYoungest (people) {
-  people.sort(function (personA, personB) {
+const getYoungest = (people) => {
+  const [youngest, ...others] = people.sort((personA, personB) => {
     return personA.age - personB.age
-  })
+  });
   return {
-    youngest: people[0],
-    others: people.slice(1)
+    youngest,
+    others
   }
 }
 
-function isActive (person) {
-  return person.isActive
-}
+const isActive = (person) => person.isActive;
 
 // aggiungi questo array in un altro file e importalo!
-var people = [
+const people = [
   {
     id: '0',
     isActive: true,
@@ -114,10 +107,10 @@ var people = [
 ];
 
 // dopo il refactoring queste funzioni dovrebbero continuare a funzioare
-var emails = getEmails(people, {
-  withNames: true,
+const emails = getEmails(people, {
+  onlyActive: true,
 });
 console.log(emails);
 
-var youngest = getYoungest(people);
+const youngest = getYoungest(people);
 console.log(youngest);
