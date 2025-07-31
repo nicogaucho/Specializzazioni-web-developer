@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import Navbar from "./components/Navbar";
-import Book from "./components/Book";
+// import { useState, useEffect } from "react";
+import Book from "../components/Book";
+import useFetch from "../hooks/useFetch";
 
 // const asyncOperation = () => {
 //   return new Promise((resolve) => {
@@ -34,41 +34,42 @@ import Book from "./components/Book";
 //   })
 // }, []);
 
-function App() {
-  const [loading, setLoading] = useState(false);
-  const [books, setBooks] = useState([]);
-  const [error, setError] = useState(null);
+function Home() {
+  const { loading, error, data } = useFetch("https://gutendex.com/books/?page=1");
 
-  useEffect(() => {
-    async function fetchData() {
-      // fetch("https://gutendex.com/books/?page=1")
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       throw new Error("Network response was not ok");
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => console.log(data))
-      //   .catch((error) => console.error("Fetch error:", error));
-      try {
-        setLoading(true);
-        const response = await fetch("https://gutendex.com/books/?page=1");
-        if (!response.ok) {
-          throw new Error("Network books response was not ok");
-        }
-        const json = await response.json();
-        setBooks(json.results);
-      } catch (error) {
-        setError(`Error getting books - ${error}`);
-      }
-      setLoading(false);
-    }
-    fetchData();
-  }, []);
+  // const [loading, setLoading] = useState(false);
+  // const [books, setBooks] = useState([]);
+  // const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     fetch("https://gutendex.com/books/?page=1")
+  //       .then((response) => {
+  //         if (!response.ok) {
+  //           throw new Error("Network response was not ok");
+  //         }
+  //         return response.json();
+  //       })
+  //       .then((data) => console.log(data))
+  //       .catch((error) => console.error("Fetch error:", error));
+  //     try {
+  //       setLoading(true);
+  //       const response = await fetch("https://gutendex.com/books/?page=1");
+  //       if (!response.ok) {
+  //         throw new Error("Network books response was not ok");
+  //       }
+  //       const json = await response.json();
+  //       setBooks(json.results);
+  //     } catch (error) {
+  //       setError(`Error getting books - ${error}`);
+  //     }
+  //     setLoading(false);
+  //   }
+  //   fetchData();
+  // }, []);
 
   return (
     <>
-      <Navbar />
       <div className="hero bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div>
@@ -110,7 +111,7 @@ function App() {
         </div>
       )}
       <div className="grid grid-cols-3 gap-3 py-6">
-        {books.map((book) => (
+        {data.map((book) => (
           <Book key={book.id} book={book} />
         ))}
       </div>
@@ -118,4 +119,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
